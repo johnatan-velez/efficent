@@ -1,0 +1,8 @@
+services:
+  spring-app:
+    image: openjdk:17-jdk-slim
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/jonathan/Library/Mobile Documents/com~apple~CloudDocs/TYPEFY/EPICO/EFFICENT/BACK/efficent/build/libs/efficent-0.0.1-SNAPSHOT.jar:/app.jar
+    command: [ "java", "-jar", "/app.jar" ]

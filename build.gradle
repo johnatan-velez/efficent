@@ -1,33 +1,35 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.2'
-	id 'io.spring.dependency-management' version '1.1.2'
+  id 'java'
+  id 'org.springframework.boot' version '3.1.2'
+  id 'io.spring.dependency-management' version '1.1.2'
 }
 
 group = 'com.epico'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+  sourceCompatibility = '17'
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-graphql'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.kafka:spring-kafka'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework:spring-webflux'
-	testImplementation 'org.springframework.graphql:spring-graphql-test'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-graphql'
+  implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.kafka:spring-kafka'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework:spring-webflux'
+  testImplementation 'org.springframework.graphql:spring-graphql-test'
+  testImplementation 'org.springframework.kafka:spring-kafka-test'
+  runtimeOnly 'com.h2database:h2'
+  compileOnly 'org.springframework.boot:spring-boot-starter-web'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
