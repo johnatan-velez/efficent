@@ -2,24 +2,24 @@ package com.epico.efficent.domain.service;
 
 import java.util.List;
 
-import com.epico.efficent.adapters.dto.UserDto;
-import com.epico.efficent.domain.entity.User;
+import com.epico.efficent.adapters.dto.request.UserRequest;
+import com.epico.efficent.adapters.dto.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService
     extends UserDetailsService
 {
-  User save(User user);
+  UserResponse save(UserRequest user);
 
-  List<UserDto> findAll();
+  List<UserResponse> findAll();
 
-  User findById(Long id);
+  UserResponse findById(Long id);
 
-  User findByEmail(String email);
+  UserResponse findByEmail(String email);
 
-  User findByEmailAndPassword(String email, String password);
+  UserResponse findByEmailAndPassword(String email, String password);
 
-  User update(User user);
+  UserResponse update(com.epico.efficent.domain.entity.User user);
 
-  User delete(Long id);
+  UserResponse delete(Long id);
 }

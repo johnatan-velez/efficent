@@ -1,4 +1,4 @@
-package com.epico.efficent.adapters.dto;
+package com.epico.efficent.adapters.dto.response;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDto
+public class UserResponse
     implements Serializable
 {
   private String id;

@@ -1,7 +1,9 @@
 package com.epico.efficent.adapters.controller;
 
-import com.epico.efficent.adapters.dto.request.AuthenticationRequestDto;
+import com.epico.efficent.adapters.dto.request.AuthenticationRequest;
+import com.epico.efficent.adapters.dto.request.UserRequest;
 import com.epico.efficent.adapters.dto.response.AuthenticationResponse;
+import com.epico.efficent.adapters.dto.response.UserResponse;
 import com.epico.efficent.domain.service.UserService;
 import com.epico.efficent.infrastructure.security.jwt.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(GeneralBasePaths.LOGIN)
+@RequestMapping(GeneralBasePaths.AUTH)
 public class AuthenticationController
 {
   private final AuthenticationManager authenticationManager;
@@ -34,8 +36,8 @@ public class AuthenticationController
     this.jwtUtil = jwtUtil;
   }
 
-  @PostMapping("")
-  public ResponseEntity<?> login(@RequestBody AuthenticationRequestDto authRequest) throws Exception {
+  @PostMapping(GeneralBasePaths.LOGIN)
+  public ResponseEntity<?> login(@RequestBody AuthenticationRequest authRequest) throws Exception {
     try {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
@@ -48,6 +50,11 @@ public class AuthenticationController
 
     final String jwt = jwtUtil.generateTokenFromUsername(userDetails.getUsername());
 
-    return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    return ResponseEntity.ok(new AuthenticationResponse(jwt, userDetails.getUsername()));
+  }
+
+  @PostMapping(GeneralBasePaths.SIGNUP)
+  public UserResponse signup(@RequestBody UserRequest userRequest) {
+    return userService.save(userRequest);
   }
 }

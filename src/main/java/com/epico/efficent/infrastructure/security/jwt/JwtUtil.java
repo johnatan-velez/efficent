@@ -15,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
@@ -24,9 +25,11 @@ public class JwtUtil
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
+  @Value("${efficent.security.jwt.secret}")
   private String jwtSecret;
 
-  private int jwtExpirationMs;
+  @Value("${efficent.security.jwt.expiration}")
+  private long jwtExpirationMs;
 
   private String jwtCookie;
 
@@ -41,7 +44,7 @@ public class JwtUtil
   public ResponseCookie generateJwtCookie(User user) {
     String jwt = generateTokenFromUsername(user.getEmail());
 
-    return ResponseCookie.from(jwtCookie, jwt).path("/").httpOnly(true).maxAge(24 * 60 * 60).build();
+    return ResponseCookie.from(jwtCookie, jwt).path("/").httpOnly(true).maxAge(jwtExpirationMs).build();
   }
 
   public ResponseCookie getCleanJwtCookie() {

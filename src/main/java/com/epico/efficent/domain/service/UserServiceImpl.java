@@ -2,11 +2,13 @@ package com.epico.efficent.domain.service;
 
 import java.util.List;
 
-import com.epico.efficent.adapters.dto.UserDto;
+import com.epico.efficent.adapters.dto.request.UserRequest;
+import com.epico.efficent.adapters.dto.response.UserResponse;
 import com.epico.efficent.adapters.repository.UserRepository;
 import com.epico.efficent.domain.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,64 +17,69 @@ public class UserServiceImpl
 {
   private final UserRepository userRepository;
 
-  public UserServiceImpl(UserRepository userRepository) {
+  private final PasswordEncoder passwordEncoder;
+
+  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
-  public User save(User user) {
-    return userRepository.save(user);
+  public UserResponse save(UserRequest userRequest) {
+    User user = convertToUser(userRequest);
+    return convertToDto(userRepository.save(user));
   }
 
   @Override
-  public List<UserDto> findAll() {
-    List<User> users = (List<User>) userRepository.findAll();
+  public List<UserResponse> findAll() {
+    List<com.epico.efficent.domain.entity.User> users =
+        (List<com.epico.efficent.domain.entity.User>) userRepository.findAll();
     return users.stream().map(this::convertToDto).toList();
   }
 
   @Override
-  public User findById(Long id) {
+  public UserResponse findById(Long id) {
     return null;
   }
 
   @Override
-  public User findByEmail(String email) {
-    return userRepository.findByEmail(email);
+  public UserResponse findByEmail(String email) {
+    return convertToDto(userRepository.findByEmail(email));
   }
 
   @Override
-  public User findByEmailAndPassword(String email, String password) {
+  public UserResponse findByEmailAndPassword(String email, String password) {
     return null;
   }
 
   @Override
-  public User update(User user) {
+  public UserResponse update(com.epico.efficent.domain.entity.User user) {
     return null;
   }
 
   @Override
-  public User delete(Long id) {
+  public UserResponse delete(Long id) {
     return null;
   }
 
-  private UserDto convertToDto(User user) {
-    UserDto userDto = new UserDto();
-    userDto.setId(user.getId().toString());
-    userDto.setEmail(user.getEmail());
-    userDto.setPassword(user.getPassword());
-    return userDto;
+  private UserResponse convertToDto(com.epico.efficent.domain.entity.User user) {
+    UserResponse userResponse = new UserResponse();
+    userResponse.setId(user.getId().toString());
+    userResponse.setEmail(user.getEmail());
+    userResponse.setPassword(user.getPassword());
+    return userResponse;
   }
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    User user = findByEmail(username);
-    if (user != null) {
-      return convertToUserDetails(user);
+    UserResponse userResponse = findByEmail(username);
+    if (userResponse != null) {
+      return convertToUserDetails(userResponse);
     }
 
     throw new UsernameNotFoundException("User '" + username + "' not found");
   }
 
-  private UserDetails convertToUserDetails(User user) {
+  private UserDetails convertToUserDetails(com.epico.efficent.domain.entity.User user) {
     return org.springframework.security.core.userdetails.User
         .withUsername(user.getEmail())
         .password(user.getPassword())
@@ -82,5 +89,12 @@ public class UserServiceImpl
         .credentialsExpired(false)
         .disabled(false)
         .build();
+  }
+
+  private User convertToUser(UserRequest userRequest) {
+    User user = new User();
+    user.setEmail(userRequest.getEmail());
+    user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+    return user;
   }
 }

@@ -2,7 +2,7 @@ package com.epico.efficent.adapters.controller;
 
 import java.util.List;
 
-import com.epico.efficent.adapters.dto.UserDto;
+import com.epico.efficent.adapters.dto.response.UserResponse;
 import com.epico.efficent.domain.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class UserController
   }
 
   @GetMapping("")
-  public List<UserDto> user() {
+  public List<UserResponse> user() {
     return userService.findAll();
   }
 }
