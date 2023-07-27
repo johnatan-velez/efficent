@@ -3,8 +3,8 @@ spring:
     name: efficent
   datasource:
     url: jdbc:postgresql://localhost:5432/efficent
-    username: efficent
-    password: ''
+    username: postgres
+    password: admin123
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
